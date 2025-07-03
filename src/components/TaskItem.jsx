@@ -1,20 +1,59 @@
 import { useState } from "react";
 
-export default function TaskItem({ task, onToggle, onDelete }) {
-  const [confirming, setConfirming] = useState(false);
+export default function TaskItem({ task, onToggle, onDelete, onEdit }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(task.title);
+  const [editDescription, setEditDescription] = useState(task.description || "");
 
-  const handleToggle = () => {
-    onToggle(task.id);
+  const handleSave = () => {
+    if (!editTitle.trim()) return alert("Title cannot be empty");
+    onEdit(task.id, {
+      ...task,
+      title: editTitle.trim(),
+      description: editDescription.trim(),
+    });
+    setIsEditing(false);
   };
 
-  const handleDelete = () => {
-    if (!confirming) {
-      setConfirming(true);
-      setTimeout(() => setConfirming(false), 2000); // reset after 2s
-      return;
-    }
-    onDelete(task.id);
+  const handleCancel = () => {
+    setEditTitle(task.title);
+    setEditDescription(task.description || "");
+    setIsEditing(false);
   };
+
+  if (isEditing) {
+    return (
+      <li className="border p-4 rounded shadow-sm bg-white space-y-3">
+        <input
+          className="w-full p-2 border rounded"
+          value={editTitle}
+          onChange={(e) => setEditTitle(e.target.value)}
+          placeholder="Task Title"
+        />
+        <textarea
+          className="w-full p-2 border rounded"
+          value={editDescription}
+          onChange={(e) => setEditDescription(e.target.value)}
+          placeholder="Task Description"
+          rows={3}
+        />
+        <div className="flex space-x-3">
+          <button
+            onClick={handleSave}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Save
+          </button>
+          <button
+            onClick={handleCancel}
+            className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+        </div>
+      </li>
+    );
+  }
 
   return (
     <li
@@ -37,7 +76,7 @@ export default function TaskItem({ task, onToggle, onDelete }) {
           <input
             type="checkbox"
             checked={task.completed}
-            onChange={handleToggle}
+            onChange={() => onToggle(task.id)}
             className="form-checkbox h-5 w-5 text-blue-600"
           />
           <span className="ml-2 text-sm">
@@ -45,14 +84,16 @@ export default function TaskItem({ task, onToggle, onDelete }) {
           </span>
         </label>
         <button
-          onClick={handleDelete}
-          className={`text-sm px-3 py-1 rounded ${
-            confirming
-              ? "bg-red-600 text-white"
-              : "bg-red-100 text-red-600 hover:bg-red-200"
-          }`}
+          onClick={() => setIsEditing(true)}
+          className="text-sm px-3 py-1 bg-yellow-200 rounded hover:bg-yellow-300"
         >
-          {confirming ? "Confirm?" : "Delete"}
+          Edit
+        </button>
+        <button
+          onClick={() => onDelete(task.id)}
+          className="text-sm px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200"
+        >
+          Delete
         </button>
       </div>
     </li>
