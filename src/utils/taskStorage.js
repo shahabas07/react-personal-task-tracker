@@ -1,10 +1,23 @@
+// src/utils/taskStorage.js
+
 const TASKS_KEY = "tasks";
 
-export const saveTasks = (tasks) => {
-  localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
-};
+export function loadTasks() {
+  try {
+    const tasksJson = localStorage.getItem(TASKS_KEY);
+    if (!tasksJson) return [];
+    return JSON.parse(tasksJson);
+  } catch (error) {
+    console.error("Failed to load tasks from localStorage", error);
+    return [];
+  }
+}
 
-export const loadTasks = () => {
-  const data = localStorage.getItem(TASKS_KEY);
-  return data ? JSON.parse(data) : [];
-};
+export function saveTasks(tasks) {
+  try {
+    const tasksJson = JSON.stringify(tasks);
+    localStorage.setItem(TASKS_KEY, tasksJson);
+  } catch (error) {
+    console.error("Failed to save tasks to localStorage", error);
+  }
+}
