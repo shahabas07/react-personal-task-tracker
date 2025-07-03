@@ -1,5 +1,7 @@
 # 📝 Personal Task Tracker
 
+[![Live with Vercel](https://img.shields.io/badge/Live-Demo-green?style=for-the-badge&logo=vercel)](https://react-personal-task-tracker-psi.vercel.app/)
+
 A responsive, single-page task management application built with **React**, **Vite**, and **Tailwind CSS**. This project is part of a technical assignment focused on evaluating frontend skills, component structure, routing, and clean code practices.
 
 ---
