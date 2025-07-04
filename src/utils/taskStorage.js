@@ -1,5 +1,3 @@
-// src/utils/taskStorage.js
-
 const TASKS_KEY = "tasks";
 
 export function loadTasks() {
