@@ -62,6 +62,8 @@ Personal Task Tracker is a modern, responsive, and user-friendly web application
 ### 📋 Dashboard (Light & Dark Mode)
 ![Dashboard Light](screenshots/dashboard-light.png)
 ![Dashboard Dark](screenshots/dashboard-dark.png)
+![Dashboard Mobile (responsive)](screenshots/dashboard-Mobile.png)
+
 
 ---
 
