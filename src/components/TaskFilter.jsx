@@ -1,41 +1,71 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { categories } from "../utils/categories";
 
-export default function TaskFilter({ filter, setFilter, search, setSearch, counts }) {
-  const [searchInput, setSearchInput] = useState(search);
-
-  // Debounce search input (300ms)
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearch(searchInput);
-    }, 300);
-
-    return () => clearTimeout(handler);
-  }, [searchInput, setSearch]);
-
+// Renders filter buttons, search, and category dropdown
+export default function TaskFilter({
+  filter,
+  setFilter,
+  search,
+  setSearch,
+  counts,
+  categoryFilter,
+  setCategoryFilter,
+}) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-3 sm:space-y-0">
-      <div className="flex space-x-3">
-        {["All", "Completed", "Pending"].map((status) => (
-          <button
-            key={status}
-            onClick={() => setFilter(status.toLowerCase())}
-            className={`px-4 py-2 rounded ${
-              filter === status.toLowerCase()
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            {status} ({counts[status.toLowerCase()] || 0})
-          </button>
-        ))}
+    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0 bg-white/70 dark:bg-gray-900/70 backdrop-blur-md p-4 rounded-xl shadow border border-gray-200 dark:border-gray-800">
+      <div className="flex space-x-2">
+        <button
+          onClick={() => setFilter("all")}
+          className={`px-3 py-1 rounded font-semibold transition ${
+            filter === "all"
+              ? "bg-gradient-to-r from-blue-500 via-purple-100 to-pink-500 text-white shadow"
+              : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+          }`}
+        >
+          All ({counts.all})
+        </button>
+        <button
+          onClick={() => setFilter("completed")}
+          className={`px-3 py-1 rounded font-semibold transition ${
+            filter === "completed"
+              ? "bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500 text-white shadow"
+              : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+          }`}
+        >
+          Completed ({counts.completed})
+        </button>
+        <button
+          onClick={() => setFilter("pending")}
+          className={`px-3 py-1 rounded font-semibold transition ${
+            filter === "pending"
+              ? "bg-gradient-to-r from-pink-400 via-purple-500 to-pink-400 text-white shadow"
+              : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200"
+          }`}
+        >
+          Pending ({counts.pending})
+        </button>
       </div>
+
       <input
-        type="search"
+        type="text"
         placeholder="Search tasks..."
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        className="border rounded px-3 py-2 w-full sm:w-64"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="p-2 border border-gray-300 dark:border-gray-700 rounded w-full sm:w-64 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-400 transition"
       />
+
+      <select
+        value={categoryFilter}
+        onChange={(e) => setCategoryFilter(e.target.value)}
+        className="p-2 border border-gray-300 dark:border-gray-700 rounded w-full sm:w-48 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-400 transition"
+      >
+        <option value="all">All Categories</option>
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }
